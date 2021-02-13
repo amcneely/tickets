@@ -16,4 +16,15 @@ class TagTest < ActiveSupport::TestCase
     tag = Tag.new(name: "feature", ticket_count: 7)
     assert tag.save
   end
+
+  test "should return tag with highest count" do
+    assert_equal Tag.most_active.name, "feature_request"
+  end
+
+  test "should increment count on tags by name" do
+    tag_names = ["feature_request","kudos"]
+    Tag.increment_count_for_names(tag_names)
+    assert_equal Tag.find_by(name: "feature_request").ticket_count, 102
+    assert_equal Tag.find_by(name: "kudos").ticket_count, 1
+  end
 end

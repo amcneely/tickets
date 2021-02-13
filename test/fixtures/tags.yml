@@ -5,3 +5,7 @@ billing:
 feature:
   name: feature_request
   ticket_count: 101
+
+docs:
+  name: docs
+  ticket_count: 8
