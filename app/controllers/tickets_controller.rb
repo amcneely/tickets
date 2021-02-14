@@ -3,17 +3,19 @@ class TicketsController < ApplicationController
   def create
     @ticket = Ticket.new(ticket_params)
 
-    render json: "Invalid Tag Names", status: :unprocessable_entity and return unless
-            Tag.valid_tag_names?(params[:tags])
+    unless Tag.valid_tag_names?(params[:tags])
+      @ticket.valid?
+      @ticket.errors.add(:base, :invalid_tags,
+          message: "tags, if present, must be an array of fewer than 5 strings")
+      render json: @ticket.errors, status: :unprocessable_entity and return
+    end
 
-    respond_to do |format|
-     if @ticket.save
-       Tag.increment_count_for_names(params[:tags])
-       Tag.send_most_active
-       format.json { render json: @ticket, status: :created }
-     else
-       format.json { render json: @ticket.errors, status: :unprocessable_entity }
-     end
+    if @ticket.save
+      Tag.increment_count_for_names(params[:tags])
+      Tag.send_most_active
+      render json: @ticket, status: :created
+    else
+      render json: @ticket.errors, status: :unprocessable_entity
     end
   end
 
