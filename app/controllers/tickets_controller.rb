@@ -9,6 +9,7 @@ class TicketsController < ApplicationController
     respond_to do |format|
      if @ticket.save
        Tag.increment_count_for_names(params[:tags])
+       Tag.send_most_active
        format.json { render json: @ticket, status: :created }
      else
        format.json { render json: @ticket.errors, status: :unprocessable_entity }

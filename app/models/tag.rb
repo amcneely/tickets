@@ -23,4 +23,10 @@ class Tag < ApplicationRecord
       tag.update!(ticket_count: tag.ticket_count + 1)
     end
   end
+
+  def self.send_most_active
+    uri = URI(ACTIVE_TAG_WEBHOOK_REQUEST_URL)
+    res = Net::HTTP.post_form(uri, "most_active_tag" => most_active.name,
+                                   "ticket_count" => most_active.ticket_count)
+  end
 end

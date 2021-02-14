@@ -55,4 +55,14 @@ class TicketsControllerTest < ActionDispatch::IntegrationTest
       assert_equal Tag.find_by(name: "billing_issue").ticket_count, 4
     end
   end
+
+  test "should send webhook request with most active tag" do
+    uri = URI(LATEST_WEBHOOK_REQUEST_URL)
+    old_latest_result = Net::HTTP.get(uri)
+    post tickets_path, params: { user_id: 52, title: "Callbacks" }, as: :json
+    assert_response :success
+    new_latest_result = Net::HTTP.get(uri)
+    assert_not_equal old_latest_result, new_latest_result
+    assert new_latest_result["feature_request"]
+  end
 end
