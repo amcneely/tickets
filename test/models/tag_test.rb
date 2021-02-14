@@ -17,6 +17,11 @@ class TagTest < ActiveSupport::TestCase
     assert tag.save
   end
 
+  test "should downcase tag names" do
+    tag = Tag.create(name: "SuGGesTION", ticket_count: 12)
+    assert_equal tag.name, "suggestion"
+  end
+
   test "should return tag with highest count" do
     assert_equal Tag.most_active.name, "feature_request"
   end
