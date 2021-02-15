@@ -1,24 +1,29 @@
-# README
+# TICKETS
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A Rails app providing an API endpoint (/tickets) to post a JSON payload with a ticket's user_id and title and optional tags: 
 
-Things you may want to cover:
+```json
+{
+  "user_id" : 1234,
+  "title" : "My title",
+  "tags" : ["tag1", "tag2"]
+}
+```
 
-* Ruby version
+Install:
 
-* System dependencies
+`bundle install`
 
-* Configuration
+`rails db:migrate`
 
-* Database creation
+Test:
 
-* Database initialization
+`rails test`
 
-* How to run the test suite
+Server:
 
-* Services (job queues, cache servers, search engines, etc.)
+`rails s`
 
-* Deployment instructions
+Sample curl:
 
-* ...
+`curl -i -d '{"user_id" : 1234,"title" : "My title A","tags" : ["tag1", "tag2"]}' -X POST -H 'Content-Type: application/json' http://localhost:3000/tickets`
